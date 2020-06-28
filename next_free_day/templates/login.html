@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="form-signin">
+    <div class="row mb-5">
+    <form method=post>
+      {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+      {% endfor %}
+      <h1>Log In</h1>
+      <div class="username">
+         {{ form.username.label }}
+         {{ form.username(autocomplete="off", autocorrect="off", autocapitalize="off", spellcheck="false", class_="form-control") }}
+         {% if form.username.errors %}
+           <ul class="errors">
+             {% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}
+           </ul>
+         {% endif %}
+      </div>
+      <div class="password">
+        {{ form.password.label }}
+        {{ form.password(class_="form-control") }}
+        {% if form.password.errors %}
+          <ul class="errors">
+            {% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      <div>
+        <input id="submit" type="submit" class="btn" value="Submit">
+      </div>
+    </form>
+    </div>
+    </div>
+{% endblock %}

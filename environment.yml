@@ -1,0 +1,12 @@
+name: free-day
+channels:
+  - pyviz
+  - defaults
+dependencies:
+  - flask=1.1.1=py_0
+  - flask-login=0.4.1=py36_0
+  - flask-wtf=0.14.2=py36_1
+  - jinja2=2.10.3=py_0
+  - werkzeug=0.16.1=py_0
+prefix: /home/ec2-user/miniconda3/envs/dashb
+

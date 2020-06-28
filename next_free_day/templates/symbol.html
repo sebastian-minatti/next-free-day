@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container">
+        <h1>{{ header | safe }}</h1>
+        <div class="row">
+            <div class="col-sm">
+                <dl class="list-inline text-left text-muted identifiers">
+                    {% for id_key, id_val in identifiers.items() %}
+                    <dt class="list-inline-item">{{ id_key | safe }}</dt><dd class="list-inline-item">{{ id_val | safe }}</dd>
+                    {% endfor %}
+                </dl>
+            </div>
+            <div class="col-sm">
+                <ul class="list-inline text-right">
+                    {% for url in urls %}
+                    <li class="list-inline-item"><a href="{{ url.url }}" target="_blank">{{ url.text }} &#8599;</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <nav aria-label="breadcrumb">
+          {% for breadcrumbs in breadcrumb_lists %}
+          <ol class="breadcrumb">
+            {% for path, ssg, name in breadcrumbs %}
+            <li class="breadcrumb-item"><a href="/{{ path }}/{{ ssg }}">{{ name | safe }}</a></li>
+            {% endfor %}
+          </ol>
+          {% endfor %}
+        </nav>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#all" class="nav-link active" data-toggle="tab">T0 Predictions</a>
+            </li>
+            <!--
+            <li class="nav-item">
+                <a href="#direct" class="nav-link" data-toggle="tab">Direct Model</a>
+            </li>
+            <li class="nav-item">
+                <a href="#early_up" class="nav-link" data-toggle="tab">Up Warning</a>
+            </li>
+            <li class="nav-item">
+                <a href="#early_down" class="nav-link" data-toggle="tab">Down Warning</a>
+            </li>
+            -->
+            <li class="nav-item">
+                <a href="#other" class="nav-link" data-toggle="tab">Other</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="all">
+                <div class="row mb-5">
+                    {{ div_charts_reg | first | safe }}
+                </div>
+                <div class="row mb-5">
+                    {{ div_charts_up | first | safe }}
+                </div>
+                <div class="row mb-5">
+                    {{ div_charts_down | first | safe }}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="direct">
+                {% for div_chart in div_charts_reg %}
+                <div class="row mb-2">
+                    {{ div_chart | safe }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="early_up">
+                {% for div_chart in div_charts_up %}
+                <div class="row mb-2">
+                    {{ div_chart | safe }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="early_down">
+                {% for div_chart in div_charts_down %}
+                <div class="row mb-2">
+                    {{ div_chart | safe }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="other">
+                {% for div_chart in div_charts_other %}
+                <div class="row mb-2">
+                    {{ div_chart | safe }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <p>&nbsp;</p>
+        </div>
+    </div>
+    {% for script_chart in script_charts_reg %}
+        {{ script_chart | safe }}
+    {% endfor %}
+    {% for script_chart in script_charts_up %}
+        {{ script_chart | safe }}
+    {% endfor %}
+    {% for script_chart in script_charts_down %}
+        {{ script_chart | safe }}
+    {% endfor %}
+    {% for script_chart in script_charts_other %}
+        {{ script_chart | safe }}
+    {% endfor %}
+{% endblock %}

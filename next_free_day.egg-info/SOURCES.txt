@@ -1,0 +1,8 @@
+README.md
+setup.py
+next_free_day.egg-info/PKG-INFO
+next_free_day.egg-info/SOURCES.txt
+next_free_day.egg-info/dependency_links.txt
+next_free_day.egg-info/namespace_packages.txt
+next_free_day.egg-info/requires.txt
+next_free_day.egg-info/top_level.txt

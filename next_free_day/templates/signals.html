@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container">
+        <ul class="nav " id="signaltabs" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link active" id="todays-tab" data-toggle="tab" href="#todays" role="tab" aria-controls="todays" aria-selected="true">Today's Signals</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" id="live-tab" data-toggle="tab" href="#live" role="tab" aria-controls="live" aria-selected="false">Current Live Signals</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" id="tracked-tab" data-toggle="tab" href="#tracked" role="tab" aria-controls="tracked" aria-selected="false">Tracked Signals</a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="myTabContent">
+            <div class="container tab-pane fade show active" id="todays" role="tabpanel" aria-labelledby="todays-tab">
+                <h3 class="">TODAY'S SIGNALS</h3>
+                <h3 class="text-white">{{ current_date }}</h3>
+                <button class="filter-button" id="filter-button" data-toggle="collapse" type="button" data-target="#filters" aria-expanded="false">
+                    <span class="fas fa-plus fa-minus" aria-hidden="true"></span> Filters
+                </button>
+                <div class="collapse" id="filters">
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="mcap_range">MCAP</label><input type="text" id="mcap_range" class="js-range-slider" name="mcap_range" value="" size="10"/>
+                        </div>
+                        <div class="col-sm">
+                            <label for="seltimeframe">Weeks Until Bucket Change</label><br/><select id="seltimeframe"><option value="">All</option><option value="1">1 week</option><option value="2">2 weeks</option><option value="4" selected="selected">4 weeks</option><option value="6">6 weeks</option><option value="8">8 weeks</option></select>
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                        <div class="col-sm">
+                        </div>
+                    </div>
+                </div>
+                <table id="today_signals" class="table table-dark table-striped table-bordered">
+                   <thead>
+                        <tr>
+                            <th>SYMBOL</th>
+                            <th>SEDOL</th>
+                            <th>CUSIP</th>
+                            <th>TODAY'S BUCKET</th>
+                            <th>PREVAILING RATE</th>
+                            <th>DIRECTION OF CHANGE</th>
+                            <th>WEEKS UNTIL BUCKET CHANGE</th>
+                            <th>SHORT INTEREST</th>
+                            <th>MARKET CAP</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="container tab-pane fade" id="live" role="tabpanel" aria-labelledby="live-tab">
+                <h3 class="">CURRENT LIVE SIGNALS</h3>
+                <h3 class="text-white">{{ current_date }}</h3>
+                <table id="live_signals" class="table table-dark table-striped table-bordered">
+                   <thead>
+                        <tr>
+                            <th>SYMBOL</th>
+                            <th>SEDOL</th>
+                            <th>CUSIP</th>
+                            <th>DAYS SIGNAL LIVE</th>
+                            <th>INITIAL BUCKET</th>
+                            <th>TODAY'S BUCKET</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+
+            <div class="container tab-pane fade" id="tracked" role="tabpanel" aria-labelledby="tracked-tab">
+                <h3 class="">TRACKED SIGNALS</h3>
+                <h3 class="text-white">{{ current_date }}</h3>
+                <table id="tracked_signals" class="table table-dark table-striped table-bordered">
+                   <thead>
+                        <tr>
+                            <th>SYMBOL</th>
+                            <th>SEDOL</th>
+                            <th>CUSIP</th>
+                            <th>DAYS SIGNAL LIVE</th>
+                            <th>INITIAL BUCKET</th>
+                            <th>TODAY'S BUCKET</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <br />
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function(){
+        $(document).ready(function() {
+            var mcapLookup = [0, 500,  750,  1000, 2000, 5000, 10000, 20000, 50000, 100000, -1];
+            var mcap_range = $("#mcap_range").ionRangeSlider({
+                type: "double",
+                skin: "modern",
+                grid: false,
+                values: ["$0", "$500m", "$750m", "$1b", "$2b", "$5b", "$10b", "$20b", "$50b", "$100b", "$Max"],
+                min: 0,
+                max: 10,
+                from: 1,
+                to: 10,
+                onFinish: function (data) {
+                    table.draw();
+                },
+            });
+
+
+            $("#filter-button").click(function (){
+                $("#filter-button > span").toggleClass("fa-plus");
+            });
+
+            var table = $('#today_signals').DataTable({
+                "info":false,
+                "bLengthChange": false,
+                "bFilter": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/today_signals",
+                    "data": function(d) {
+                        return $.extend( {}, d, {
+                            "timeframe": $('#seltimeframe').val(),
+                            "mcap_range": {"min": mcapLookup[mcap_range.data().from],
+                                           "max": mcapLookup[mcap_range.data().to]},
+                        });
+                    }
+                },
+                "columns": [
+                    { "data": "symbol" },
+                    { "data": "SEDOL" },
+                    { "data": "CUSIP" },
+                    { "data": "prevailingRate_bucket" },
+                    { "data": "prevailingRate" },
+                    { "data": "y_signal_direction" },
+                    { "data": "timeframe" },
+                    { "data": "SHORT_INT" },
+                    { "data": "marketCap" },
+                ],
+                dom: 'Bfrtip',
+                "scrollY":        "500px",
+                "scrollCollapse": true,
+                "paging":         false,
+                buttons: [
+                    {
+                        text: '<span class="fas fa-download"></span> Download current view as CSV',
+                        action: function (e, dt, node, config) {
+                            params = table.ajax.params();
+                            params.csv = true;
+                            params = $.param(params);
+                            window.location = '/today_signals?'+params;
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        render: function(data, type, row) {
+                            if (data == "Increase") {
+                                return '<i class="fas fa-arrow-circle-up" style="color:green;"></i> '+data;
+                            } else if (data == "Decrease") {
+                                return '<i class="fas fa-arrow-circle-down" style="color:red;"></i> '+data;
+                            }
+                        },
+                        targets: 5
+                    }
+                ],
+                language: {
+                    searchPlaceholder: "Symbol Search"
+                }
+            });
+
+            $('#seltimeframe').on('change', function() {
+                table.draw();
+            });
+
+        });
+
+    });
+
+</script>
+<script>
+    $(function(){
+        $(document).ready(function() {
+            var livetable = $('#live_signals').DataTable({
+                "info":false,
+                "bLengthChange": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/live_signals",
+                "columns": [
+                    { "data": "symbol" },
+                    { "data": "SEDOL" },
+                    { "data": "CUSIP" },
+                    { "data": "Active_Days" },
+                    { "data": "T0_bucket" },
+                    { "data": "prevailingRate_bucket" }
+                ],
+                dom: 'Bfrtip',
+                "scrollY":        "500px",
+                "scrollCollapse": true,
+                "paging":         false,
+                buttons: [
+                    {
+                        text: '<span class="fas fa-download"></span> Download all data as CSV',
+                        action: function (e, dt, node, config) {
+                            window.location = '/live_signals?csv=True'
+                        }
+                    }
+                ],
+                columnDefs: [
+                ],
+                language: {
+                    searchPlaceholder: "Symbol Search"
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
