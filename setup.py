@@ -1,7 +1,7 @@
 from setuptools import setup, find_namespace_packages
 
 REQUIRED_PACKAGES = [
-    'flask', 'flask-login', 'werkzeug', 'Flask-Caching']
+    'flask', 'flask-login', 'werkzeug', 'Flask-Caching', 'gunicorn']
 
 setup(name='next-free-day',
       version='0.0.1',
