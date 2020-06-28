@@ -27,7 +27,10 @@
   <component name="ChangeListManager">
     <list default="true" id="24d59382-9b72-45fa-b025-c82ca702c49c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/next_free_day.egg-info/requires.txt" beforeDir="false" afterPath="$PROJECT_DIR$/next_free_day.egg-info/requires.txt" afterDir="false" />
+=======
+>>>>>>> 7a5c6e50a028d1e5432aea7e14255db7f96eec61
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
