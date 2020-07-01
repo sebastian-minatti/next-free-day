@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div>
+        <div class="container">
+            <h1>{{ header | safe}}</h1>
+            <p>{{ exception }}</p>
+            <p><a href="/">Home</a></p>
+        </div>
+    </div>
+{% endblock %}

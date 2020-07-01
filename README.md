@@ -17,4 +17,4 @@ Set up app package:
     
 To run a development server with Flask WSGI:
 
-    FLASK_ENV=development FLASK_APP=next_free_day.main flask run --port 5001 --host 0.0.0.0
+    FLASK_ENV=development FLASK_APP=app flask run --port 5001 --host 0.0.0.0

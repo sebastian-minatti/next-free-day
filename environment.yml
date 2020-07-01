@@ -10,5 +10,5 @@ dependencies:
   - werkzeug=0.16.1=py_0
   - gunicorn=20.0.4=py36_0
   - setuptools=45.1.0=py36_0
-prefix: /home/ec2-user/miniconda3/envs/dashb
+prefix: /home/ec2-user/miniconda3/envs/free-day
 
